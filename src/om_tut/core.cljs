@@ -6,10 +6,14 @@
 
 (def app-state (atom {:list ["Lion" "Zebra" "Buffalo" "Antelope"]}))
 
+(defn stripe [text bgc]
+  (let [st #js {:backgroundColor bgc}]
+    (dom/li #js {:style st} text)))
+
 (om/root
   (fn [app owner]
     (om/component
-      (apply dom/ul nil
-        (map (fn [text] (dom/li nil text)) (:list app)))))
+      (apply dom/ul #js {:className "animals"}
+        (map stripe (:list app) (cycle ["#ff0", "#fff"])))))
   app-state
-  {:target (. js/document (getElementById "app0"))})
+  {:target (. js/document (getElementById "app"))})
